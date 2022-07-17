@@ -1,58 +1,32 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Comment } from './comment.entity';
+import type { Document } from 'mongoose';
+import { Types } from 'mongoose';
 
-interface TrackConstructor {
-  name: string;
-  artist: string;
-  track: string;
-  listens: string;
-  audio: string;
-  picture?: string;
-  comments?: Comment[];
-}
+export type TrackDocument = Track & Document;
 
-@Entity()
+@Schema()
 export class Track {
-  constructor({
-    name,
-    artist,
-    track,
-    listens,
-    audio,
-    comments,
-    picture,
-  }: TrackConstructor) {
-    this.name = name;
-    this.artist = artist;
-    this.track = track;
-    this.listens = listens;
-    this.audio = audio;
-    this.comments = comments;
-    this.picture = picture;
-  }
-
-  @ObjectIdColumn()
-  id: ObjectID;
-
-  @Column()
+  @Prop({ unique: true })
   name: string;
 
-  @Column()
+  @Prop()
   artist: string;
 
-  @Column()
+  @Prop()
   track: string;
 
-  @Column()
-  listens: string;
+  @Prop()
+  listens: number;
 
-  @Column()
+  @Prop()
   picture: string;
 
-  @Column()
+  @Prop()
   audio: string;
 
-  @Column((type) => Comment)
-  comments: Comment[];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Comment' }] })
+  comments: Array<Types.ObjectId>;
 }
+
+export const TrackSchema = SchemaFactory.createForClass(Track);

@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 
 import { TracksController } from './tracks.controller';
 import { TracksService } from './tracks.service';
-import { Comment, Track } from './entities';
+import { Comment, CommentSchema, Track, TrackSchema } from './entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment, Track])],
+  imports: [
+    MongooseModule.forFeature([
+      { name: Comment.name, schema: CommentSchema },
+      { name: Track.name, schema: TrackSchema },
+    ]),
+  ],
   controllers: [TracksController],
   providers: [TracksService],
 })

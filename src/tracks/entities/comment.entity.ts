@@ -1,29 +1,21 @@
-import { Column, Entity, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+
+import * as mongoose from 'mongoose';
+
 import { Track } from './track.entity';
 
-interface CommentConstructor {
-  username: string;
-  text: string;
-  track: Track;
-}
+export type CommentDocument = Comment & Document;
 
-@Entity()
+@Schema()
 export class Comment {
-  constructor({ username, text, track }: CommentConstructor) {
-    this.username = username;
-    this.text = text;
-    this.track = track;
-  }
-
-  @ObjectIdColumn()
-  id: ObjectID;
-
-  @Column()
+  @Prop()
   username: string;
 
-  @Column()
+  @Prop()
   text: string;
 
-  @Column((type) => Track)
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Track' })
   track: Track;
 }
+
+export const CommentSchema = SchemaFactory.createForClass(Comment);

@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import typeOrmConfig from '@config/typeOrm.config';
+import mongooseConfig from '@config/mongoose.config';
 
 import { TracksModule } from './tracks/tracks.module';
 
 @Module({
   imports: [
     TracksModule,
-    TypeOrmModule.forRootAsync({
-      useFactory: typeOrmConfig,
+    MongooseModule.forRootAsync({
+      useFactory: mongooseConfig,
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
